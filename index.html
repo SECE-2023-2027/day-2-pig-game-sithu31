@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dice Game</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main>
+    <button class="btn btn--new-game" id="btn-new-game">
+      <span class="icon">🔄</span> NEW GAME
+    </button>
+
+    <section class="player player--0 player--active">
+      <h2 class="name" id="name--0">PLAYER 1</h2>
+      <p class="score" id="score--0">0</p>
+      <div class="current">
+        <p class="current-label">CURRENT</p>
+        <p class="current-score" id="current--0">0</p>
+      </div>
+    </section>
+
+    <div class="center-controls">
+      <img src="die4.jpg" alt="Dice" class="dice" id="dice" />
+      <button class="btn btn--roll" id="btn-roll">
+        <span class="icon">🎲</span> ROLL DICE
+      </button>
+      <button class="btn btn--hold" id="btn-hold">
+        <span class="icon">📥</span> HOLD
+      </button>
+    </div>
+
+    <section class="player player--1">
+      <h2 class="name" id="name--1">PLAYER 2</h2>
+      <p class="score" id="score--1">0</p>
+      <div class="current">
+        <p class="current-label">CURRENT</p>
+        <p class="current-score" id="current--1">0</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
