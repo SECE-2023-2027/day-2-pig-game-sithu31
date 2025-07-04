@@ -9,10 +9,10 @@ const btnNew = document.getElementById('btn-new-game');
 const btnRoll = document.getElementById('btn-roll');
 const btnHold = document.getElementById('btn-hold');
 
-let scores, currentScore, activePlayer, playing;
+let scores, currentScore, activePlayer, playing, rollInterval;
 
 function init() {
-  scores = [0, 0]; 
+  scores = [0, 0];
   currentScore = 0;
   activePlayer = 0;
   playing = true;
@@ -28,6 +28,12 @@ function init() {
   player1El.classList.remove('player--active');
   player0El.classList.remove('player--winner');
   player1El.classList.remove('player--winner');
+
+  // Clear any existing interval when resetting the game
+  if (rollInterval) {
+    clearInterval(rollInterval);
+    rollInterval = null;
+  }
 }
 
 init();
@@ -48,22 +54,35 @@ function switchPlayer() {
   player1El.classList.toggle('player--active');
 }
 
+function rollDice() {
+  if (playing) {
+    const dice = Math.trunc(Math.random() * 4) + 1;
+    diceEl.style.display = 'block';
+    diceEl.src = `die${dice}.jpg`;
+
+    switch (dice) {
+      case 1:
+        switchPlayer();
+        break;
+      default:
+        currentScore += dice;
+        document.getElementById(`current--${activePlayer}`).textContent = currentScore;
+        break;
+    }
+  }
+}
+
+function startRolling() {
+  if (playing && !rollInterval) {
+    rollDice(); // Roll immediately
+    rollInterval = setInterval(rollDice, 3000); // Continue rolling every 3 seconds
+  }
+}
+
 btnRoll.addEventListener('click', function () {
   switch (playing) {
     case true:
-      const dice = Math.trunc(Math.random() * 4) + 1;
-      diceEl.style.display = 'block';
-      diceEl.src = `die${dice}.jpg`; 
-
-      switch (dice) {
-        case 1:
-          switchPlayer();
-          break;
-        default:
-          currentScore += dice;
-          document.getElementById(`current--${activePlayer}`).textContent = currentScore;
-          break;
-      }
+      startRolling();
       break;
     default:
       break;
@@ -73,6 +92,11 @@ btnRoll.addEventListener('click', function () {
 btnHold.addEventListener('click', function () {
   switch (playing) {
     case true:
+      // Stop the rolling interval when hold is pressed
+      if (rollInterval) {
+        clearInterval(rollInterval);
+        rollInterval = null;
+      }
       scores[activePlayer] += currentScore;
       document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer];
 
@@ -85,6 +109,7 @@ btnHold.addEventListener('click', function () {
           break;
         default:
           switchPlayer();
+          startRolling(); // Automatically start rolling for the next player
           break;
       }
       break;
